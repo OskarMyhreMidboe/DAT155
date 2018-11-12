@@ -16,7 +16,9 @@ import {
     PointLight,
     PCFSoftShadowMap,
     MeshStandardMaterial,
-    Object3D
+    Object3D,
+    IcosahedronBufferGeometry,
+    LOD
 } from './lib/Three.es.js';
 
 
@@ -30,7 +32,9 @@ const scene = new Scene();
 scene.background = fogColor;
 scene.fog = new Fog( fogColor, -10, 150 );
 
+
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+let lodMoon = new LOD();
 
 const renderer = new WebGLRenderer({
     antialias: true
@@ -187,7 +191,7 @@ skydome();
 loop();
 setShip();
 setTimeout(makeMeSomeTrees ,'2000');
-moon()
+moon();
 
 function loop() {
     // update controller rotation.
@@ -200,10 +204,17 @@ function loop() {
     // animate cube rotation:
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
-    moonNode.rotation.z += 0.001;
+    moonNode.rotation.z += 0.005;
+
+    if(moonNode.rotation.z > 90*Math.PI/180){
+        moonNode.rotation.z = -90*Math.PI/180;
+    }
 
     // render scene:
     renderer.render(scene, camera);
+
+    //Update LOD
+    lodMoon.update(camera);
 
     requestAnimationFrame(loop);
 
@@ -309,34 +320,35 @@ function makeMeSomeTrees(numberOfTrees = 20) {
 
 function moon(){
 
-    let moonGeometry = new SphereGeometry(5, 32, 32)
-    let moonTexture = loader.load('resources/images/moonmap.jpg')
-
-//Code to make moon bumpy**
-/**
-    let moonHeightmap = loader.load('resources/images/moonHeightmap.png')
-    let moonMaterial = new MeshStandardMaterial({
-        map: moonTexture,
-        side:3,
-        bumpMap: moonHeightmap,
-        bumpScale: 0.3,
-        metalness: 0.0
-    })
-**/
-
+    let moonTexture = loader.load('resources/images/moonmap.jpg');
     let moonMaterial = new MeshBasicMaterial({
-        map: moonTexture
+        map: moonTexture,
+        fog: false
     });
-    let moon = new Mesh(moonGeometry, moonMaterial);
-    moon.position.y = 90;
-    moonNode.add(moon);
+
+    for( let i = 0; i < 3; i++ ) {
+
+        let moonGeometry = new IcosahedronBufferGeometry( 5, 3 - i );
+
+        let moon = new Mesh( moonGeometry, moonMaterial );
+
+        lodMoon.addLevel( moon, i * 20 );
+
+    }
+
+    //let moonGeometry = new SphereGeometry(5, 32, 32)
+
+    //let moon = new Mesh(moonGeometry, moonMaterial);
+    lodMoon.position.y = 90;
+    moonNode.add(lodMoon);
 
 
 
+    //Lighting for the moon
     let moonLight = new PointLight( 0xFFFFFFF, 0.7, 1000);
     moonLight.castShadow = true;
 
-    moon.add( moonLight );
+    lodMoon.add( moonLight );
 }
 
 function setShip(){
