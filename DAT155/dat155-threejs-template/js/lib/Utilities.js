@@ -1,5 +1,4 @@
 "use strict";
-
 /**
  * Collection of general purpose utilities.
  * oskarbraten
@@ -60,5 +59,34 @@ export default class Utilities {
         });
 
         return data;
+    }
+
+
+    static getRandomCord(min, max) {
+        this.min = Math.ceil(min);
+        this.max = Math.floor(max);
+        return Math.floor(Math.random() * (this.max - this.min)) + this.min; //The maximum is exclusive and the minimum is inclusive
+    }
+
+    static randomXAndYCord(position, terrainGeometry) {
+
+        do{
+            position.x = this.getRandomCord(-50, 50);
+            position.z = this.getRandomCord(-50, 50);
+            position.y = terrainGeometry.getHeightAt(position);
+        }while(position.y < 4.0);
+
+
+        return position
+    }
+
+    static cloneObjects(object, numberOfClones){
+        let clones = [];
+        clones[0] = object;
+
+        for(let x = 0; x < numberOfClones; x++){
+            clones[x+1] = clones[x].clone();
+        }
+        return clones;
     }
 }

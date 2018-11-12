@@ -8,39 +8,40 @@ import {
     SphereGeometry,
     MeshPhongMaterial,
     TextureLoader,
-    Vector3,
-    RepeatWrapping,
-    ImageUtils,
-    ShaderMaterial,
-    Vector2,
-    Vector4,
-    ShaderLib,
     PlaneBufferGeometry,
-    AmbientLight,
     Fog,
-    Color
-
-} from './lib/three.module.js';
-
+    Color,
+    OBJLoader,
+    MTLLoader,
+    PointLight,
+    PCFSoftShadowMap,
+    MeshStandardMaterial,
+    Object3D
+} from './lib/Three.es.js';
 
 
 import Utilities from './lib/Utilities.js';
 import MouseLookController from './controls/MouseLookController.js';
 
-import TerrainBufferGeometry from './terrain/TerrainBufferGeometry.js';
-import OBJLoader from "./loaders/OBJLoader";
-
-const fogColor = new Color( 0xEFFEFF );
+import TerrainBufferGeometry from "./terrain/TerrainBufferGeometry.js";
+const fogColor = new Color( 0x000000 );
 const scene = new Scene();
 
 scene.background = fogColor;
-scene.fog = new Fog( fogColor, 0.1, 100 );
+scene.fog = new Fog( fogColor, -10, 150 );
 
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-const renderer = new WebGLRenderer();
+const renderer = new WebGLRenderer({
+    antialias: true
+});
 renderer.setClearColor( 0x000000 );
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = PCFSoftShadowMap;
+
+let loader = new TextureLoader();
+
 
 
 
@@ -80,13 +81,12 @@ camera.position.y = 15;
  * An alternative way to handle asynchronous functions is async/await
  *  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
  */
-let loader = new TextureLoader();
-let objLoader = new OBJLoader();
-//let mtlLoader = new THREE.MTLLoader();
+
+let terrainGeometry;
 
 Utilities.loadImage('resources/images/heightmap.png').then((heightmapImage) => {
 
-    const terrainGeometry = new TerrainBufferGeometry({
+    terrainGeometry = new TerrainBufferGeometry({
         heightmapImage,
         numberOfSubdivisions: 128
     });
@@ -97,6 +97,12 @@ Utilities.loadImage('resources/images/heightmap.png').then((heightmapImage) => {
 
     const terrain = new Mesh(terrainGeometry, terrainMaterial);
 
+    terrain.traverse ( function (node) {
+        if (node instanceof Mesh ){
+            node.castShadow = true ;
+            node.receiveShadow = true ;
+        }
+    });
     scene.add(terrain);
 
 });
@@ -171,15 +177,17 @@ document.addEventListener('keydown', (e) =>{
 });
 
 
+let moonNode = new Object3D();
+moonNode.rotation.x += -20*Math.PI/180;
+moonNode.rotation.z -= 40*Math.PI/180;
+scene.add(moonNode);
 
-
-
-light();
 water();
 skydome();
-//makeMeSomeTrees();
 loop();
-
+setShip();
+setTimeout(makeMeSomeTrees ,'2000');
+moon()
 
 function loop() {
     // update controller rotation.
@@ -187,9 +195,12 @@ function loop() {
     yaw = 0;
     pitch = 0;
 
+
+    //console.log('x: ' + camera.position.x +  '\t y: ' + camera.position.z);
     // animate cube rotation:
     cube.rotation.x += 0.01;
     cube.rotation.y += 0.01;
+    moonNode.rotation.z += 0.001;
 
     // render scene:
     renderer.render(scene, camera);
@@ -198,30 +209,24 @@ function loop() {
 
 }
 
-function light(){
-    let light = new AmbientLight( 0xFFFFFFF ); // soft white light
-    light.intensity = 0.7;
-
-    scene.add( light );
-}
-
-
 function water() {
     let waterGeometry = new PlaneBufferGeometry(200, 200);
-
-    let waterMaterial2 = new ShaderMaterial({
-        vertexShader: document.getElementById('vertexShader').textContent,
-        fragmentShader: document.getElementById('fragmentShader').textContent
-    });
 
     const waterMaterial = new MeshPhongMaterial({
         map: loader.load('resources/textures/water.jpg'),
         side: 2
-    })
+    });
 
     let water = new Mesh(waterGeometry, waterMaterial);
     water.rotation.x = Math.PI * -0.5;
     water.translateZ(4);
+
+    water.traverse ( function (node) {
+        if (node instanceof Mesh ){
+            node.castShadow = false ;
+            node.receiveShadow = true ;
+        }
+    });
 
     scene.add(water);
 }
@@ -229,22 +234,139 @@ function water() {
 function skydome() {
     let skyGeometry = new SphereGeometry(100, 25, 25);
 
-    let texture = loader.load("resources/skydome/skyTexture2.jpg");
-
-    let material = new MeshPhongMaterial({
+    let texture = loader.load("resources/skydome/skyTexture3.jpg");
+    let material = new MeshStandardMaterial({
         map: texture,
-        side: 2
+        side: 2,
+
     });
 
     let sky = new Mesh(skyGeometry, material);
     //  sky.rotation.x = Math.PI * -0.5;
 
+    sky.traverse ( function (node) {
+        if (node instanceof Mesh ){
+            node.castShadow = false;
+            node.receiveShadow = false;
+        }
+    });
+
     scene.add(sky);
 }
 
 
-function makeMeSomeTrees() {
 
-    objLoader.load('resources/models/lowPolyTree/lowpolytree.obj')
+function makeMeSomeTrees(numberOfTrees = 20) {
+
+    new MTLLoader()
+        .load( 'resources/models/lowPolyTree/lowpolytree.mtl', function( materials ) {
+
+        materials.preload();
+        new OBJLoader()
+            .setMaterials( materials )
+            .load( 'resources/models/lowPolyTree/lowpolytree.obj', function ( object ) {
+
+             console.log(object);
+
+            object.traverse ( function (node) {
+                if (node instanceof Mesh ){
+                    node.castShadow = true ;
+                    node.receiveShadow = true ;
+                    node.material[0].emissive.setHex(0x006900);
+                    node.material[0].emissiveIntensity = 0.4;
+                    node.material[1].emissive.setHex(0x404040);
+                    node.material[1].emissiveIntensity = 0.4;
+                    node.material[0].roughness = 1.0;
+
+
+                }
+            });
+
+
+
+
+
+
+
+            const trees = Utilities.cloneObjects(object, numberOfTrees);
+            for(let x = 0; x < trees.length; x++){
+                trees[x].position.xyz = Utilities.randomXAndYCord(trees[x].position, terrainGeometry);
+                trees[x].position.x -=50;
+                trees[x].position.z -=50;
+                trees[x].position.y += 2;
+                scene.add( trees[x] );
+            }
+
+
+
+
+
+        });
+
+    });
+
 }
 
+function moon(){
+
+    let moonGeometry = new SphereGeometry(5, 32, 32)
+    let moonTexture = loader.load('resources/images/moonmap.jpg')
+
+//Code to make moon bumpy**
+/**
+    let moonHeightmap = loader.load('resources/images/moonHeightmap.png')
+    let moonMaterial = new MeshStandardMaterial({
+        map: moonTexture,
+        side:3,
+        bumpMap: moonHeightmap,
+        bumpScale: 0.3,
+        metalness: 0.0
+    })
+**/
+
+    let moonMaterial = new MeshBasicMaterial({
+        map: moonTexture
+    });
+    let moon = new Mesh(moonGeometry, moonMaterial);
+    moon.position.y = 90;
+    moonNode.add(moon);
+
+
+
+    let moonLight = new PointLight( 0xFFFFFFF, 0.7, 1000);
+    moonLight.castShadow = true;
+
+    moon.add( moonLight );
+}
+
+function setShip(){
+
+
+    let lantern = new PointLight( 0xFFFFFFF, 1.0, 5);
+    lantern.castShadow = true;
+    lantern.position.y += 1;
+
+    new MTLLoader()
+        .load( 'resources/models/ship/pirate-ship-fat.mtl', function( materials ) {
+
+        materials.preload();
+        new OBJLoader()
+            .setMaterials( materials )
+            .load( 'resources/models/ship/pirate-ship-fat.obj', function ( object ) {
+            object.position.y = 4;
+            object.position.x = 80;
+            object.add(lantern);
+
+            object.traverse ( function (node) {
+                if (node instanceof Mesh ){
+                    node.castShadow = true ;
+                    node.receiveShadow = true ;
+                }
+            });
+
+            scene.add( object );
+
+        });
+
+    });
+}

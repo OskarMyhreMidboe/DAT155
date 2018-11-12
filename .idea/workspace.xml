@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8b82fe85-0716-4409-92da-0187b985cb02" name="Default Changelist" comment="">
+    <list default="true" id="d333c939-16a7-4af4-9c6f-0dec103cb094" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/ObjectLoader.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/Three.es.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/terrain/Three.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/images/moonmap.jpg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DAT155/dat155-threejs-template/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/DAT155/dat155-threejs-template/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/Utilities.js" beforeDir="false" afterPath="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/Utilities.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/skydome/skyTexture.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/skydome/skyTexture.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/textures/Gras_01.png" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -18,42 +27,48 @@
     <session id="1352795945">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="7" />
-          <entry key="project.open.time.0" value="5" />
-          <entry key="project.open.time.1" value="2" />
+          <entry key="project.closed" value="5" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.5" value="1" />
+          <entry key="project.open.time.6" value="2" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="8" />
+          <entry key="project.open.time.8" value="1" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="glsl" value="1" />
           <entry key="html" value="1" />
-          <entry key="jpg" value="1" />
+          <entry key="jpg" value="3" />
           <entry key="js" value="19" />
-          <entry key="mtl" value="1" />
-          <entry key="obj" value="1" />
-          <entry key="png" value="1" />
+          <entry key="mtl" value="3" />
+          <entry key="obj" value="5" />
+          <entry key="png" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
+          <entry key="GLSL shader file" value="1" />
           <entry key="HTML" value="1" />
-          <entry key="Image" value="2" />
+          <entry key="Image" value="5" />
           <entry key="JavaScript" value="19" />
-          <entry key="PLAIN_TEXT" value="2" />
+          <entry key="PLAIN_TEXT" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="html" value="399" />
-          <entry key="js" value="3774" />
+          <entry key="html" value="233" />
+          <entry key="js" value="7711" />
+          <entry key="mtl" value="19" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="GLSL shader file" value="6" />
-          <entry key="HTML" value="393" />
-          <entry key="JavaScript" value="3774" />
+          <entry key="GLSL shader file" value="10" />
+          <entry key="HTML" value="223" />
+          <entry key="JavaScript" value="7711" />
+          <entry key="PLAIN_TEXT" value="19" />
         </counts>
       </usages-collector>
     </session>
@@ -63,8 +78,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+            <state relative-caret-position="544">
+              <caret line="32" column="3" selection-start-line="32" selection-start-column="3" selection-end-line="32" selection-end-column="3" />
             </state>
           </provider>
         </entry>
@@ -72,20 +87,29 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="243" column="3" lean-forward="true" selection-start-line="243" selection-start-column="3" selection-end-line="243" selection-end-column="3" />
-              <folding>
-                <element signature="e#0#413#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="136">
+              <caret line="258" column="43" selection-start-line="258" selection-start-column="43" selection-end-line="258" selection-end-column="43" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/loaders/OBJLoader.js">
+        <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/Utilities.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="10" lean-forward="true" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
+            <state relative-caret-position="215">
+              <caret line="75" column="62" selection-start-line="75" selection-start-column="62" selection-end-line="75" selection-end-column="62" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/terrain/TerrainBufferGeometry.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-142">
+              <caret line="8" column="58" selection-start-line="8" selection-start-column="58" selection-end-line="8" selection-end-column="58" />
+              <folding>
+                <element signature="e#74#118#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -101,17 +125,11 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>geometry</find>
-      <find>camaera</find>
-      <find>SphereBuffer</find>
+      <find>load</find>
+      <find>bark</find>
+      <find>use</find>
       <find>fog</find>
-      <find>Terrain</find>
-      <find>Water</find>
-      <find>ObjectLoader</find>
-      <find>MTL</find>
-      <find>.apply</find>
-      <find>apply</find>
-      <find>ShaderMater</find>
+      <find>three</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -120,12 +138,13 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/terrain/TerrainBufferGeometry.js" />
-        <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/OBJLoader.js" />
-        <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/three.module.js" />
-        <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/OBJMTLLoader.js" />
-        <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/loaders/OBJLoader.js" />
+        <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/models/meg/oskar_full.obj.mtl" />
         <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/index.html" />
+        <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/utils/State.js" />
+        <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/ObjectLoader.js" />
+        <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/terrain/Three.js" />
+        <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/terrain/TerrainBufferGeometry.js" />
+        <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/Utilities.js" />
         <option value="$PROJECT_DIR$/DAT155/dat155-threejs-template/js/main.js" />
       </list>
     </option>
@@ -152,12 +171,12 @@
     <option name="width" value="1685" />
     <option name="height" value="1055" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -188,6 +207,22 @@
               <item name="Freddyprosjekt" type="462c0819:PsiDirectoryNode" />
               <item name="DAT155" type="462c0819:PsiDirectoryNode" />
               <item name="dat155-threejs-template" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Freddyprosjekt" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Freddyprosjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="DAT155" type="462c0819:PsiDirectoryNode" />
+              <item name="dat155-threejs-template" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="terrain" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Freddyprosjekt" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Freddyprosjekt" type="462c0819:PsiDirectoryNode" />
+              <item name="DAT155" type="462c0819:PsiDirectoryNode" />
+              <item name="dat155-threejs-template" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -197,23 +232,6 @@
               <item name="dat155-threejs-template" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="images" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Freddyprosjekt" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freddyprosjekt" type="462c0819:PsiDirectoryNode" />
-              <item name="DAT155" type="462c0819:PsiDirectoryNode" />
-              <item name="dat155-threejs-template" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Freddyprosjekt" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freddyprosjekt" type="462c0819:PsiDirectoryNode" />
-              <item name="DAT155" type="462c0819:PsiDirectoryNode" />
-              <item name="dat155-threejs-template" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="models" type="462c0819:PsiDirectoryNode" />
-              <item name="lowPolyTree" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Freddyprosjekt" type="b2602c69:ProjectViewProjectNode" />
@@ -235,20 +253,17 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="settings.typescriptcompiler" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\OneDrive\Skole\DAT155 - Grafiske metoder\Eksempelkode\Freddyprosjekt\DAT155\dat155-threejs-template\resources\models" />
-      <recent name="D:\OneDrive\Skole\DAT155 - Grafiske metoder\Eksempelkode\Freddyprosjekt\DAT155\dat155-threejs-template\resources\textures" />
+      <recent name="D:\OneDrive\Skole\DAT155 - Grafiske metoder\Eksempelkode\Freddyprosjekt\DAT155\dat155-threejs-template\resources\images" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -278,43 +293,41 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="8b82fe85-0716-4409-92da-0187b985cb02" name="Default Changelist" comment="" />
-      <created>1541611399400</created>
+      <changelist id="d333c939-16a7-4af4-9c6f-0dec103cb094" name="Default Changelist" comment="" />
+      <created>1541750899322</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1541611399400</updated>
-      <workItem from="1541611400791" duration="16000" />
-      <workItem from="1541611428996" duration="81000" />
-      <workItem from="1541611602391" duration="123000" />
-      <workItem from="1541611813915" duration="56000" />
-      <workItem from="1541611905687" duration="5021000" />
-      <workItem from="1541630462082" duration="720000" />
-      <workItem from="1541631466979" duration="28375000" />
-      <workItem from="1541746742851" duration="2991000" />
+      <updated>1541750899322</updated>
+      <workItem from="1541750903267" duration="7632000" />
+      <workItem from="1541775580188" duration="1282000" />
+      <workItem from="1541847288058" duration="6191000" />
+      <workItem from="1542018770403" duration="15090000" />
+      <workItem from="1542041665904" duration="5910000" />
+      <workItem from="1542047604913" duration="1433000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="37383000" />
+    <option name="totallyTimeSpent" value="37538000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="848" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1579643" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19828156" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32947975" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4990086" visible="true" weight="0.3699422" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.4976867" visible="true" weight="0.27601156" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.33040935" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5009914" side_tool="true" weight="0.39944133" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32803467" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50231326" side_tool="true" weight="0.27601156" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -327,83 +340,99 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/skydome/skyTexture.jpg">
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/models/lowPolyTree/lowpolytree.obj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="389" column="11" selection-start-line="389" selection-start-column="7" selection-end-line="389" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/models/meg/oskar_full.obj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-20697">
+          <caret line="280796" column="3" selection-start-line="280796" selection-end-line="280796" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/models/lowPolyTree/lowpolytree.mtl">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/models/meg/oskar_full.obj.mtl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="19" selection-start-line="1" selection-start-column="19" selection-end-line="1" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/loaders/OBJLoader.js" />
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/utils/State.js" />
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/ObjectLoader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="36" column="30" selection-start-line="36" selection-start-column="30" selection-end-line="36" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="http://localhost:63342/Freddyprosjekt/DAT155/dat155-threejs-template/js/main.js">
+      <provider selected="true" editor-type-id="httpFileEditor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/terrain/Three.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/three.module.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-187">
+          <caret line="12479" column="9" selection-start-line="12479" selection-start-column="9" selection-end-line="12479" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/Three.es.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-235">
+          <caret line="20146" column="9" selection-start-line="20146" selection-start-column="9" selection-end-line="20146" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/textures/lovenes_konge.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/textures/seabed.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/textures/water.jpg">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/images/heightmap.png">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/models/lowPolyTree/lowpolytree.mtl">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js">
-      <provider selected="true" editor-type-id="httpFileEditor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/OBJMTLLoader.js">
+    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1173">
-          <caret line="69" column="60" selection-start-line="69" selection-start-column="60" selection-end-line="69" selection-end-column="60" />
+        <state relative-caret-position="544">
+          <caret line="32" column="3" selection-start-line="32" selection-start-column="3" selection-end-line="32" selection-end-column="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/Utilities.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/MTLLoader.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6943">
-          <caret line="21" column="9" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/OBJLoader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="351" column="28" selection-start-line="351" selection-start-column="28" selection-end-line="351" selection-end-column="28" />
+        <state relative-caret-position="215">
+          <caret line="75" column="62" selection-start-line="75" selection-start-column="62" selection-end-line="75" selection-end-column="62" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/terrain/TerrainBufferGeometry.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="34" selection-start-line="10" selection-start-column="34" selection-end-line="10" selection-end-column="34" />
+        <state relative-caret-position="-142">
+          <caret line="8" column="58" selection-start-line="8" selection-start-column="58" selection-end-line="8" selection-end-column="58" />
           <folding>
             <element signature="e#74#118#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/lib/three.module.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="12974" column="9" selection-start-line="12974" selection-start-column="9" selection-end-line="12974" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/resources/models/lowPolyTree/lowpolytree.obj">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/loaders/OBJLoader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="10" lean-forward="true" selection-start-line="15" selection-start-column="10" selection-end-line="15" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/DAT155/dat155-threejs-template/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="243" column="3" lean-forward="true" selection-start-line="243" selection-start-column="3" selection-end-line="243" selection-end-column="3" />
-          <folding>
-            <element signature="e#0#413#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="136">
+          <caret line="258" column="43" selection-start-line="258" selection-start-column="43" selection-end-line="258" selection-end-column="43" />
         </state>
       </provider>
     </entry>
