@@ -24,7 +24,8 @@ import {
     CubicBezierCurve3,
     Path,
     Vector2,
-    Line
+    Line,
+    Group
 } from './lib/Three.es.js';
 
 
@@ -42,11 +43,9 @@ scene.fog = nightFog;
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 let loader = new TextureLoader();
 let moonNode, sunNode, lodMoon, lodSun;
-let boat = new Object3D();
-
 let nightTexture = loader.load("resources/skydome/skyTexture3.jpg");
 let dayTexture = loader.load("resources/skydome/skyTexture2.jpg");
-
+let boat = new Group();
 const renderer = new WebGLRenderer({
     antialias: true
 });
@@ -157,7 +156,7 @@ document.addEventListener('pointerlockchange', () => {
 });
 
 let time = {
-    counter:1,
+    counter: 1,
     mode: 1
 };
 
@@ -168,8 +167,6 @@ let move = {
     right: false,
     speed: 0.02
 };
-
-
 
 
 
@@ -228,18 +225,11 @@ scene.add(skyDome);
 //Variables and const for movement
 const velocity = new Vector3(0.0, 0.0, 0.0);
 let then = performance.now();
-let path ;
-let line = boatPath()
-let position = 0;
-let up = new Vector3(0, 1, 0);
-let axis = new Vector3();
-let previousAngle = Utilities.getAngle( position, path );
-let previousPoint = path.getPointAt( position );
+
 
 function loop(now) {
     // update controller rotation.
     mouseLookController.update(pitch, yaw);
-
     const delta = now-then;
     then = now;
     const moveSpeed = move.speed * delta;
@@ -262,6 +252,7 @@ function loop(now) {
         velocity.z += moveSpeed;
     }
 
+    //Legger beveglsen til velocity utifra camera vinkel og legger til bevegelse
     velocity.applyQuaternion(camera.quaternion);
     camera.position.add(velocity);
 
@@ -269,7 +260,6 @@ function loop(now) {
     //Rotate both sun and moon
     moonNode.rotation.z += 0.01;
     sunNode.rotation.z += 0.01;
-    driveBoat();
 
 
 
@@ -288,6 +278,7 @@ function loop(now) {
 
     //Update LOD
     lodMoon.update(camera);
+    lodSun.update(camera);
     camera.updateWorldMatrix();
     requestAnimationFrame(loop);
 
@@ -296,10 +287,8 @@ function loop(now) {
 moonAndSun();
 water();
 setTimeout(makeMeSomeTrees ,'2000');
-scene.add(boatPath());
-
-//driveBoat();
-scene.add(boat).then(requestAnimationFrame(loop));
+setShip();
+setTimeout(requestAnimationFrame(loop),'2000');
 
 
 
@@ -333,9 +322,7 @@ function skydome() {
 
     let material = new MeshStandardMaterial({
         map: nightTexture,
-        side: 2,
-        reflectivity: 0.0,
-        shininess: 0
+        side: 2
     });
 
     let sky = new Mesh(skyGeometry, material);
@@ -402,7 +389,6 @@ function setShip(){
     let lantern = new PointLight( 0xFFFFFFF, 1.0, 5);
     lantern.castShadow = true;
     lantern.position.y += 1;
-    let boat;
 
     new MTLLoader()
         .load( 'resources/models/ship/pirate-ship-fat.mtl', function( materials ) {
@@ -411,21 +397,19 @@ function setShip(){
         new OBJLoader()
             .setMaterials( materials )
             .load( 'resources/models/ship/pirate-ship-fat.obj', function ( object ) {
-            object.position.y = 4;
-            object.position.x = 80;
-            object.add(lantern);
 
-            object.traverse ( function (node) {
-                if (node instanceof Mesh ){
-                    node.castShadow = true ;
-                    node.receiveShadow = true ;
-                }
+                object.add(lantern);
+                object.name = "boat";
+                console.log(object);
+                object.traverse ( function (node) {
+                    if (node instanceof Mesh ){
+                        node.castShadow = true ;
+                        node.receiveShadow = true ;
+                    }
+                });
+            boat = object;
+            scene.add(boat);
             });
-
-            scene.add(object);
-        });
-
-        return new 3DObjecobject;
 
     });
 }
@@ -514,69 +498,9 @@ function setDayNight(skydome){
 }
 
 function boatPath(){
-
-    let line = new Line();
-    /**
-    let curve = new CurvePath();
-    curve.add(
-        new CubicBezierCurve3(
-            new Vector3( -100, 4, 50 ),
-            new Vector3( -100, 4, 300 ),
-            new Vector3( 200, 4, 30 ),
-            new Vector3( 100, 4, 80 )
-        )
-    );
-    curve.add(
-        new CubicBezierCurve3(
-            new Vector3( 100, 4, 80 ),
-            new Vector3( 200, 4, 150 ),
-            new Vector3( -200, 4, -100 ),
-            new Vector3( 200, 4, 350 )
-        )
-    );
-    curve.add(
-        new CubicBezierCurve3(
-            new Vector3( 200, 4, 350 ),
-            new Vector3( 200, 4, 150 ),
-            new Vector3( -200, 4, -100 ),
-            new Vector3( -100, 4, 50 )
-        )
-    );
-
-    return curve;
-    **/
-
-    path = new Path([
-        new Vector2(-50, -50),
-        new Vector2(0, -50)
-    ]);
-
-    let arcRadius = 50;
-    path.moveTo(0, 0 - arcRadius);
-    path.absarc(0, 0, arcRadius, -Math.PI / 2, 0, false);
-    path.lineTo(50, 50);
-
-    return line = Utilities.drawPath(path);
-
 }
 
 function driveBoat(){
-
-    // add up to position for movement
-    position += 0.001;
-
-    // get the point at position
-    let point = path.getPointAt(position);
-    boat.position.x = point.x;
-    boat.position.z = point.z;
-
-    let angle = Utilities.getAngle(position, path);
-    // set the quaternion
-    boat.quaternion.setFromAxisAngle( up, angle );
-
-
-    previousPoint = point;
-    previousAngle = angle;
 }
 
 
