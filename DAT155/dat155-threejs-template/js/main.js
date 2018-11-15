@@ -2,13 +2,10 @@ import {
     PerspectiveCamera,
     WebGLRenderer,
     Scene,
-    BoxBufferGeometry,
     MeshBasicMaterial,
     Mesh,
-    SphereGeometry,
     MeshPhongMaterial,
     TextureLoader,
-    PlaneBufferGeometry,
     Fog,
     Color,
     OBJLoader,
@@ -18,7 +15,16 @@ import {
     MeshStandardMaterial,
     Object3D,
     IcosahedronBufferGeometry,
-    LOD
+    LOD,
+    SphereBufferGeometry,
+    CircleBufferGeometry,
+    Node,
+    Vector3,
+    CurvePath,
+    CubicBezierCurve3,
+    Path,
+    Vector2,
+    Line
 } from './lib/Three.es.js';
 
 
@@ -26,25 +32,30 @@ import Utilities from './lib/Utilities.js';
 import MouseLookController from './controls/MouseLookController.js';
 
 import TerrainBufferGeometry from "./terrain/TerrainBufferGeometry.js";
-const fogColor = new Color( 0x000000 );
 const scene = new Scene();
 
-scene.background = fogColor;
-scene.fog = new Fog( fogColor, -10, 150 );
-
+scene.background = 0xFFFFFF;
+let nightFog = new Fog( 0x808080, -10, 150 );
+let dayFog = new Fog( 0xFFFFFF, -10, 200 );
+scene.fog = nightFog;
 
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-let lodMoon = new LOD();
+let loader = new TextureLoader();
+let moonNode, sunNode, lodMoon, lodSun;
+let boat = new Object3D();
+
+let nightTexture = loader.load("resources/skydome/skyTexture3.jpg");
+let dayTexture = loader.load("resources/skydome/skyTexture2.jpg");
 
 const renderer = new WebGLRenderer({
     antialias: true
 });
-renderer.setClearColor( 0x000000 );
+
+renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = PCFSoftShadowMap;
 
-let loader = new TextureLoader();
 
 
 
@@ -67,13 +78,9 @@ window.addEventListener('resize', () => {
  */
 document.body.appendChild(renderer.domElement);
 
-const geometry = new BoxBufferGeometry(1, 1, 1);
-const material = new MeshBasicMaterial({ color: 0x00ff00 });
-const cube = new Mesh(geometry, material);
-scene.add(cube);
-
 camera.position.z = 55;
 camera.position.y = 15;
+
 
 
 /**
@@ -88,7 +95,7 @@ camera.position.y = 15;
 
 let terrainGeometry;
 
-Utilities.loadImage('resources/images/heightmap.png').then((heightmapImage) => {
+Utilities.loadImage('resources/images/heightmap2.png').then((heightmapImage) => {
 
     terrainGeometry = new TerrainBufferGeometry({
         heightmapImage,
@@ -96,8 +103,10 @@ Utilities.loadImage('resources/images/heightmap.png').then((heightmapImage) => {
     });
 
     const terrainMaterial = new MeshPhongMaterial({
-        map: loader.load('resources/textures/lovenes_konge.jpg')
+        map: loader.load('resources/textures/lovenes_konge.jpg'),
+        clipShadows: true
     });
+
 
     const terrain = new Mesh(terrainGeometry, terrainMaterial);
 
@@ -147,81 +156,156 @@ document.addEventListener('pointerlockchange', () => {
     }
 });
 
+let time = {
+    counter:1,
+    mode: 1
+};
+
+let move = {
+    forward: false,
+    backwards: false,
+    left: false,
+    right: false,
+    speed: 0.02
+};
+
 
 
 
 
 //Setting up movement-controlls with WASD
-let moveSpeed = 0.5;
-let direction = camera.getWorldDirection();
 document.addEventListener('keydown', (e) =>{
-    e.preventDefault();
-    camera.getWorldDirection(direction);
-
-
-
     switch(e.code){
         case 'KeyW':
-            camera.position.add(direction.multiplyScalar(moveSpeed));
+            move.forward = true;
+            e.preventDefault();
             break;
 
         case 'KeyA':
+            move.left = true;
+            e.preventDefault();
             break;
 
         case 'KeyS':
-            camera.position.add(direction.multiplyScalar(-moveSpeed));
+            move.backwards = true;
+            e.preventDefault();
             break;
 
         case 'KeyD':
+            move.right = true;
+            e.preventDefault();
             break;
     }
+});
+document.addEventListener('keyup', (e) =>{
+    switch(e.code){
+        case 'KeyW':
+            move.forward = false;
+            e.preventDefault();
+            break;
 
-    camera.updateWorldMatrix();
+        case 'KeyA':
+            move.left = false;
+            e.preventDefault();
+            break;
 
+        case 'KeyS':
+            move.backwards = false;
+            e.preventDefault();
+            break;
+
+        case 'KeyD':
+            move.right = false;
+            e.preventDefault();
+            break;
+    }
 });
 
+//Setting up the skydome and storing it so that we later can use it to change texture
+let skyDome = skydome();
+scene.add(skyDome);
 
-let moonNode = new Object3D();
-moonNode.rotation.x += -20*Math.PI/180;
-moonNode.rotation.z -= 40*Math.PI/180;
-scene.add(moonNode);
+//Variables and const for movement
+const velocity = new Vector3(0.0, 0.0, 0.0);
+let then = performance.now();
+let path ;
+let line = boatPath()
+let position = 0;
+let up = new Vector3(0, 1, 0);
+let axis = new Vector3();
+let previousAngle = Utilities.getAngle( position, path );
+let previousPoint = path.getPointAt( position );
 
-water();
-skydome();
-loop();
-setShip();
-setTimeout(makeMeSomeTrees ,'2000');
-moon();
-
-function loop() {
+function loop(now) {
     // update controller rotation.
     mouseLookController.update(pitch, yaw);
+
+    const delta = now-then;
+    then = now;
+    const moveSpeed = move.speed * delta;
+    //Reset mouse-point every frame
     yaw = 0;
     pitch = 0;
 
+    velocity.set(0.0, 0.0, 0.0);
 
-    //console.log('x: ' + camera.position.x +  '\t y: ' + camera.position.z);
-    // animate cube rotation:
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
-    moonNode.rotation.z += 0.005;
-
-    if(moonNode.rotation.z > 90*Math.PI/180){
-        moonNode.rotation.z = -90*Math.PI/180;
+    if(move.left){
+        velocity.x -= moveSpeed;
     }
+    if(move.right){
+        velocity.x += moveSpeed;
+    }
+    if(move.forward){
+        velocity.z -= moveSpeed;
+    }
+    if(move.backwards){
+        velocity.z += moveSpeed;
+    }
+
+    velocity.applyQuaternion(camera.quaternion);
+    camera.position.add(velocity);
+
+
+    //Rotate both sun and moon
+    moonNode.rotation.z += 0.01;
+    sunNode.rotation.z += 0.01;
+    driveBoat();
+
+
+
+    if( moonNode.rotation.z > (time.counter*90)*Math.PI/180){
+
+        time.counter+=2;
+
+        setDayNight(skyDome);
+
+        time.mode = (time.mode % 2) +1;
+
+    };
 
     // render scene:
     renderer.render(scene, camera);
 
     //Update LOD
     lodMoon.update(camera);
-
+    camera.updateWorldMatrix();
     requestAnimationFrame(loop);
 
 }
 
+moonAndSun();
+water();
+setTimeout(makeMeSomeTrees ,'2000');
+scene.add(boatPath());
+
+//driveBoat();
+scene.add(boat).then(requestAnimationFrame(loop));
+
+
+
+
 function water() {
-    let waterGeometry = new PlaneBufferGeometry(200, 200);
+    let waterGeometry = new CircleBufferGeometry(100, 32);
 
     const waterMaterial = new MeshPhongMaterial({
         map: loader.load('resources/textures/water.jpg'),
@@ -231,6 +315,7 @@ function water() {
     let water = new Mesh(waterGeometry, waterMaterial);
     water.rotation.x = Math.PI * -0.5;
     water.translateZ(4);
+
 
     water.traverse ( function (node) {
         if (node instanceof Mesh ){
@@ -243,13 +328,14 @@ function water() {
 }
 
 function skydome() {
-    let skyGeometry = new SphereGeometry(100, 25, 25);
+    let skyGeometry = new SphereBufferGeometry(100, 32, 32, Math.PI/2, Math.PI*2, 0, 0.5 * Math.PI);
 
-    let texture = loader.load("resources/skydome/skyTexture3.jpg");
+
     let material = new MeshStandardMaterial({
-        map: texture,
+        map: nightTexture,
         side: 2,
-
+        reflectivity: 0.0,
+        shininess: 0
     });
 
     let sky = new Mesh(skyGeometry, material);
@@ -262,10 +348,8 @@ function skydome() {
         }
     });
 
-    scene.add(sky);
+    return sky;
 }
-
-
 
 function makeMeSomeTrees(numberOfTrees = 20) {
 
@@ -277,8 +361,6 @@ function makeMeSomeTrees(numberOfTrees = 20) {
             .setMaterials( materials )
             .load( 'resources/models/lowPolyTree/lowpolytree.obj', function ( object ) {
 
-             console.log(object);
-
             object.traverse ( function (node) {
                 if (node instanceof Mesh ){
                     node.castShadow = true ;
@@ -288,20 +370,16 @@ function makeMeSomeTrees(numberOfTrees = 20) {
                     node.material[1].emissive.setHex(0x404040);
                     node.material[1].emissiveIntensity = 0.4;
                     node.material[0].roughness = 1.0;
+                    node.material[1].roughness = 1.0;
+
 
 
                 }
             });
 
-
-
-
-
-
-
             const trees = Utilities.cloneObjects(object, numberOfTrees);
             for(let x = 0; x < trees.length; x++){
-                trees[x].position.xyz = Utilities.randomXAndYCord(trees[x].position, terrainGeometry);
+                trees[x].position.xyz = Utilities.randomXAndZCord(trees[x].position, terrainGeometry);
                 trees[x].position.x -=50;
                 trees[x].position.z -=50;
                 trees[x].position.y += 2;
@@ -318,45 +396,13 @@ function makeMeSomeTrees(numberOfTrees = 20) {
 
 }
 
-function moon(){
-
-    let moonTexture = loader.load('resources/images/moonmap.jpg');
-    let moonMaterial = new MeshBasicMaterial({
-        map: moonTexture,
-        fog: false
-    });
-
-    for( let i = 0; i < 3; i++ ) {
-
-        let moonGeometry = new IcosahedronBufferGeometry( 5, 3 - i );
-
-        let moon = new Mesh( moonGeometry, moonMaterial );
-
-        lodMoon.addLevel( moon, i * 20 );
-
-    }
-
-    //let moonGeometry = new SphereGeometry(5, 32, 32)
-
-    //let moon = new Mesh(moonGeometry, moonMaterial);
-    lodMoon.position.y = 90;
-    moonNode.add(lodMoon);
-
-
-
-    //Lighting for the moon
-    let moonLight = new PointLight( 0xFFFFFFF, 0.7, 1000);
-    moonLight.castShadow = true;
-
-    lodMoon.add( moonLight );
-}
-
 function setShip(){
 
 
     let lantern = new PointLight( 0xFFFFFFF, 1.0, 5);
     lantern.castShadow = true;
     lantern.position.y += 1;
+    let boat;
 
     new MTLLoader()
         .load( 'resources/models/ship/pirate-ship-fat.mtl', function( materials ) {
@@ -376,9 +422,161 @@ function setShip(){
                 }
             });
 
-            scene.add( object );
-
+            scene.add(object);
         });
+
+        return new 3DObjecobject;
 
     });
 }
+
+function moonAndSun(){
+
+    lodSun = new LOD();
+    lodMoon = new LOD();
+    moonNode = createMoonNode();
+    sunNode = createSunNode();
+
+    const moonTexture = loader.load('resources/images/moonmap.jpg');
+    const sunTexture = loader.load('resources/images/sunmap.jpg');
+    const moonMaterial = new MeshBasicMaterial({
+        map: moonTexture,
+        fog: false
+    });
+    const sunMaterial = new MeshBasicMaterial({
+        map: sunTexture,
+        fog: false
+    });
+
+    for( let i = 0; i < 3; i++ ) {
+
+        let Geometry = new IcosahedronBufferGeometry( 5, 3 - i );
+        let moon = new Mesh( Geometry, moonMaterial );
+        let sun = new Mesh( Geometry, sunMaterial );
+        lodMoon.addLevel( moon, (i * 30)+30 );
+        lodSun.addLevel( sun, (i * 30)+30 );
+
+    }
+
+    //let moonGeometry = new SphereGeometry(5, 32, 32)
+
+    //let moon = new Mesh(moonGeometry, moonMaterial);
+    lodMoon.position.y = 90;
+    lodSun.position.y = 90;
+    moonNode.add(lodMoon);
+    sunNode.add(lodSun);
+
+
+
+    //Lighting for the moon
+    let moonLight = new PointLight( 0xFFFFFFF, 0.4, 1000);
+    moonLight.castShadow = true;
+    let sunLight = new PointLight( 0xFFFFFFF, 0.8, 1000);
+    sunLight.castShadow = true;
+
+    lodMoon.add( moonLight );
+    lodSun.add( sunLight );
+}
+
+function createMoonNode(){
+    moonNode = new Object3D();
+    moonNode.rotation.x += -20*Math.PI/180;
+    moonNode.rotation.z -= 40*Math.PI/180;
+    scene.add(moonNode);
+    return moonNode
+}
+function createSunNode(){
+    sunNode = new Object3D();
+    sunNode.rotation.x += -20*Math.PI/180;
+    sunNode.rotation.z += 140*Math.PI/180;
+    scene.add(sunNode);
+    return sunNode
+}
+
+function setDayNight(skydome){
+
+    skydome.traverse ( function (node) {
+        if (node instanceof Mesh ){
+
+            if(time.mode === 1){
+                node.material.map = dayTexture;
+                scene.fog = dayFog;
+            }else{
+                node.material.map = nightTexture;
+                scene.fog = nightFog
+            }
+
+            node.material.needsUpdate = true;
+
+        }
+    });
+
+}
+
+function boatPath(){
+
+    let line = new Line();
+    /**
+    let curve = new CurvePath();
+    curve.add(
+        new CubicBezierCurve3(
+            new Vector3( -100, 4, 50 ),
+            new Vector3( -100, 4, 300 ),
+            new Vector3( 200, 4, 30 ),
+            new Vector3( 100, 4, 80 )
+        )
+    );
+    curve.add(
+        new CubicBezierCurve3(
+            new Vector3( 100, 4, 80 ),
+            new Vector3( 200, 4, 150 ),
+            new Vector3( -200, 4, -100 ),
+            new Vector3( 200, 4, 350 )
+        )
+    );
+    curve.add(
+        new CubicBezierCurve3(
+            new Vector3( 200, 4, 350 ),
+            new Vector3( 200, 4, 150 ),
+            new Vector3( -200, 4, -100 ),
+            new Vector3( -100, 4, 50 )
+        )
+    );
+
+    return curve;
+    **/
+
+    path = new Path([
+        new Vector2(-50, -50),
+        new Vector2(0, -50)
+    ]);
+
+    let arcRadius = 50;
+    path.moveTo(0, 0 - arcRadius);
+    path.absarc(0, 0, arcRadius, -Math.PI / 2, 0, false);
+    path.lineTo(50, 50);
+
+    return line = Utilities.drawPath(path);
+
+}
+
+function driveBoat(){
+
+    // add up to position for movement
+    position += 0.001;
+
+    // get the point at position
+    let point = path.getPointAt(position);
+    boat.position.x = point.x;
+    boat.position.z = point.z;
+
+    let angle = Utilities.getAngle(position, path);
+    // set the quaternion
+    boat.quaternion.setFromAxisAngle( up, angle );
+
+
+    previousPoint = point;
+    previousAngle = angle;
+}
+
+

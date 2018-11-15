@@ -1,4 +1,11 @@
 "use strict";
+import {
+    LineBasicMaterial,
+    Vector3,
+    Line,
+    Geometry
+} from "./Three.es.js";
+
 /**
  * Collection of general purpose utilities.
  * oskarbraten
@@ -68,13 +75,13 @@ export default class Utilities {
         return Math.floor(Math.random() * (this.max - this.min)) + this.min; //The maximum is exclusive and the minimum is inclusive
     }
 
-    static randomXAndYCord(position, terrainGeometry) {
+    static randomXAndZCord(position, terrainGeometry) {
 
         do{
             position.x = this.getRandomCord(-50, 50);
             position.z = this.getRandomCord(-50, 50);
             position.y = terrainGeometry.getHeightAt(position);
-        }while(position.y < 4.0);
+        }while(position.y < 4.0 || position.y > 10.0);
 
 
         return position
@@ -88,5 +95,68 @@ export default class Utilities {
             clones[x+1] = clones[x].clone();
         }
         return clones;
+    }
+
+    static transformQuat(out, a, q) {
+        // benchmarks: https://jsperf.com/quaternion-transform-vec3-implementations-fixed
+        var qx = q[0],
+            qy = q[1],
+            qz = q[2],
+            qw = q[3];
+        var x = a[0],
+            y = a[1],
+            z = a[2];
+        // var qvec = [qx, qy, qz];
+        // var uv = vec3.cross([], qvec, a);
+        var uvx = qy * z - qz * y,
+            uvy = qz * x - qx * z,
+            uvz = qx * y - qy * x;
+        // var uuv = vec3.cross([], qvec, uv);
+        var uuvx = qy * uvz - qz * uvy,
+            uuvy = qz * uvx - qx * uvz,
+            uuvz = qx * uvy - qy * uvx;
+        // vec3.scale(uv, uv, 2 * w);
+        var w2 = qw * 2;
+        uvx *= w2;
+        uvy *= w2;
+        uvz *= w2;
+        // vec3.scale(uuv, uuv, 2);
+        uuvx *= 2;
+        uuvy *= 2;
+        uuvz *= 2;
+        // return vec3.add(out, a, vec3.add(out, uv, uuv));
+        out[0] = x + uvx + uuvx;
+        out[1] = y + uvy + uuvy;
+        out[2] = z + uvz + uuvz;
+        return out;
+    }
+
+    static drawPath(path){
+        let vertices = path.getSpacedPoints(20);
+        let point;
+        // Change 2D points to 3D points
+        //Because our up is Y we have to set the y to the z poss and since waterheight is 4 we set Y to 4
+        for (let i = 0; i < vertices.length; i++) {
+            point = vertices[i];
+            vertices[i] = new Vector3(point.x, 4, point.y);
+        }
+        let lineGeometry = new Geometry();
+        lineGeometry.vertices = vertices;
+        let lineMaterial = new LineBasicMaterial({
+            color: 0xffffff
+        });
+        let line = new Line(lineGeometry, lineMaterial);
+
+        return line
+    }
+
+    static getAngle( position , path){
+    // get the 2Dtangent to the curve
+        let tangent = path.getTangent(position).normalize();
+
+        // change tangent to 3D
+        let angle = - Math.atan( tangent.x / tangent.y);
+
+        return angle;
     }
 }
