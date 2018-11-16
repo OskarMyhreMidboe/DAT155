@@ -149,7 +149,7 @@ export default class Utilities {
     }
 
     static getAngle( position , path){
-    // get the 2Dtangent to the curve
+    // get the tangent to the curve
         let tangent = path.getTangent(position).normalize();
 
 

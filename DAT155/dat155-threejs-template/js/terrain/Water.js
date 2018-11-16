@@ -9,7 +9,7 @@ export default class Water extends Object3D{
         let waterGeometry = new CircleBufferGeometry(100, 32);
 
         const waterMaterial = new MeshPhongMaterial({
-            map: new TextureLoader().load('resources/textures/water.jpg'),
+            map: new TextureLoader().load('resources/textures/water_resized.jpg'),
             side: 2
         });
 

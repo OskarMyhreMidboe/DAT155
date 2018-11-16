@@ -5,14 +5,13 @@ export default class SunMoonNode extends Object3D{
 
     constructor(texturePath, lightIntensity, rotX, rotZ){
         super();
-        sunMoon = new SunMoon(texturePath, lightIntensity);
+        this.sunMoon = new SunMoon(texturePath, lightIntensity);
         this.rotation.x += rotX*Math.PI/180;
         this.rotation.z += rotZ*Math.PI/180;
-        this.add(sunMoon);
+        this.add(this.sunMoon);
     }
 
     updateLOD(camera){
-        sunMoon.update(camera);
+        this.sunMoon.update(camera);
     }
 }
-let sunMoon;

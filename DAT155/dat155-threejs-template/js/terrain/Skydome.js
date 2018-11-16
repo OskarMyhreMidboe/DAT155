@@ -5,8 +5,8 @@ export default class Skydome extends Object3D{
     constructor(){
         super();
 
-        nightTexture = tl.load("resources/skydome/skyTexture3.jpg");
-        dayTexture = tl.load("resources/skydome/skyTexture2.jpg");
+        nightTexture = tl.load("resources/skydome/skyTexture3_resized.jpg");
+        dayTexture = tl.load("resources/skydome/skyTexture2_resized.jpg");
 
         let skyGeometry = new SphereBufferGeometry(100, 32, 32, Math.PI/2, Math.PI*2, 0, 0.5 * Math.PI);
 
@@ -19,7 +19,7 @@ export default class Skydome extends Object3D{
         let sky = new Mesh(skyGeometry, material);
         //  sky.rotation.x = Math.PI * -0.5;
 
-        sky.traverse ( function (node) {
+        sky.traverse ( (node) => {
             if (node instanceof Mesh ){
                 node.castShadow = false;
                 node.receiveShadow = false;
@@ -32,7 +32,7 @@ export default class Skydome extends Object3D{
 
     setDayNight(time){
 
-        this.traverse ( function (node) {
+        this.traverse ( (node) => {
             if (node instanceof Mesh ){
 
                 if(time === 1){
