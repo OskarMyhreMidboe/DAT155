@@ -1,10 +1,10 @@
 /**
- * Terrain geometry based on PlaneBufferGeometry.
+ * Island geometry based on PlaneBufferGeometry.
  * oskarbraten
  */
 
 import Utilities from '../lib/Utilities.js';
-import { PlaneBufferGeometry } from '../lib/three.module.js';
+import { PlaneBufferGeometry } from '../lib/Three.es.js';
 
 export default class TerrainBufferGeometry extends PlaneBufferGeometry {
 

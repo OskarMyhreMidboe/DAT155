@@ -75,19 +75,20 @@ export default class Utilities {
         return Math.floor(Math.random() * (this.max - this.min)) + this.min; //The maximum is exclusive and the minimum is inclusive
     }
 
-    static randomXAndZCord(position, terrainGeometry) {
+    static randomXAndZCord(position, terrainGeometry, waterLevel) {
+
 
         do{
             position.x = this.getRandomCord(-50, 50);
             position.z = this.getRandomCord(-50, 50);
             position.y = terrainGeometry.getHeightAt(position);
-        }while(position.y < 4.0 || position.y > 10.0);
+        }while(position.y < waterLevel || position.y > 10.0);
 
 
         return position
     }
 
-    static cloneObjects(object, numberOfClones){
+    static cloneObjects(object, numberOfClones = 20){
         let clones = [];
         clones[0] = object;
 
@@ -131,15 +132,12 @@ export default class Utilities {
         return out;
     }
 
-    static drawPath(path){
-        let vertices = path.getSpacedPoints(20);
+    static drawPath(curve){
+        let vertices = curve.getSpacedPoints(50);
         let point;
         // Change 2D points to 3D points
         //Because our up is Y we have to set the y to the z poss and since waterheight is 4 we set Y to 4
-        for (let i = 0; i < vertices.length; i++) {
-            point = vertices[i];
-            vertices[i] = new Vector3(point.x, 4, point.y);
-        }
+
         let lineGeometry = new Geometry();
         lineGeometry.vertices = vertices;
         let lineMaterial = new LineBasicMaterial({
@@ -147,15 +145,17 @@ export default class Utilities {
         });
         let line = new Line(lineGeometry, lineMaterial);
 
-        return line
+        return line;
     }
 
     static getAngle( position , path){
     // get the 2Dtangent to the curve
         let tangent = path.getTangent(position).normalize();
 
+
         // change tangent to 3D
-        let angle = - Math.atan( tangent.x / tangent.y);
+
+        let angle = - Math.atan( tangent.z/tangent.x);
 
         return angle;
     }

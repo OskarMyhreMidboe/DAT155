@@ -1,7 +1,7 @@
 import {
     Quaternion,
     Vector3
-} from '../lib/three.module.js';
+} from '../lib/Three.es.js';
 
 export default class MouseLookController {
 
