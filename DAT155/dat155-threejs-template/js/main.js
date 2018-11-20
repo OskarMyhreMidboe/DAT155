@@ -10,10 +10,10 @@ import MyScene from "./lib/MyScene.js";
 import Boat from "./terrain/Boat.js";
 import Skydome from "./terrain/Skydome.js";
 import SunMoonNode from "./terrain/SunMoonNode.js";
-import Water from "./terrain/Water.js";
+import Water2 from "./terrain/Water2.js";
 import Island from "./terrain/Island.js";
 import Renderer from "./lib/Renderer.js"
-import Utilities from "./lib/Utilities.js";
+
 
 
 const scene = new MyScene();
@@ -21,7 +21,6 @@ const scene = new MyScene();
 const waterLevel = 4.0;
 const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new Renderer();
-
 const mouseLookController = new MouseLookController(camera);
 const keyboardMovementController = new KeyboardMovementController(camera);
 /**
@@ -89,17 +88,19 @@ let skyDome = new Skydome();
 let sun = new SunMoonNode('resources/images/sunmap.jpg', 0.8, -20, 140);
 let moon = new SunMoonNode('resources/images/moonmap.jpg', 0.4, -20, -40);
 let boat = new Boat(waterLevel);
-
-scene.add( new Island(waterLevel), skyDome, sun, moon, new Water(waterLevel), boat , Utilities.drawPath(boat.boatLine));
+let water = new Water2(waterLevel);
+scene.add( new Island(waterLevel), skyDome, sun, moon, water, boat );
 
 
 let then = performance.now();
-
+let start = Date.now();
+let deltaTime = 0;
 function loop(now) {
     // update controller rotation.
     mouseLookController.update(pitch, yaw);
     const delta = now-then;
     then = now;
+    deltaTime = Date.now()-start;
 
     //Reset mouse-point every frame
     yaw = 0;
@@ -118,6 +119,7 @@ function loop(now) {
 
         skyDome.setDayNight(time.mode);
         scene.switchFog(time.mode);
+        water.dayNightEnvMap(time.mode);
         time.mode = (time.mode % 2) +1;
 
     };
@@ -129,8 +131,8 @@ function loop(now) {
     sun.updateLOD(camera);
     moon.updateLOD(camera);
 
-
-    boat.driveBoat();
+    boat.driveBoat(deltaTime);
+    water.flow(deltaTime);
 
     //Oppdaterer camera-beveglse utifra keyboard
     keyboardMovementController.update(delta);
@@ -141,6 +143,3 @@ function loop(now) {
 
 }
 requestAnimationFrame(loop);
-
-
-

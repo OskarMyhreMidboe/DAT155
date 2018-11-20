@@ -7,6 +7,7 @@ export default class Boat extends Group{
         super();
 
         this.boat = new Group();
+        this.waterLevel = waterLevel;
 
         this.placementInCurve = 0;
         this.up = new Vector3(0, 1, 0);
@@ -29,7 +30,7 @@ export default class Boat extends Group{
                     .load( 'resources/models/ship/pirate-ship-fat.obj', ( object ) => {
 
                         object.add(lantern);
-                        object.position.y = waterLevel + 0.5;
+                        object.position.y = this.waterLevel;
 
                         object.traverse ( function (node) {
                             if (node instanceof Mesh ){
@@ -47,24 +48,24 @@ export default class Boat extends Group{
 
     boatPath(){
         let path1 = new CubicBezierCurve3(
-            new Vector3( -50, 4, -40 ),
-            new Vector3( -80, 4, 10 ),
-            new Vector3( -90, 4, 20 ),
-            new Vector3( 35, 4, 45 )
+            new Vector3( -45, 4, -45 ),
+            new Vector3( 30, 4, -90 ),
+            new Vector3( 90, 4, -30 ),
+            new Vector3( 45, 4, 45 )
         );
 
         let path2 = new CubicBezierCurve3(
-            new Vector3( 35, 4, 45 ),
-            new Vector3( 40, 4, -80 ),
-            new Vector3( 10, 4, -70 ),
-            new Vector3( -50, 4, -40 )
+            new Vector3( 45, 4, 45 ),
+            new Vector3( -30, 4, 90 ),
+            new Vector3( -90, 4, 30 ),
+            new Vector3( -45, 4, -45 )
         );
 
         this.boatLine.add(path1);
         this.boatLine.add(path2);
     }
 
-    driveBoat(){
+    driveBoat(timeDelta){
         // add up to position for movement
         this.placementInCurve += 0.0001;
 
@@ -77,6 +78,7 @@ export default class Boat extends Group{
         }
         this.boat.position.x = point.x;
         this.boat.position.z = point.z;
+        this.boat.position.y = Math.sin(timeDelta/4000)+0.2;
 
         let angle = Utilities.getAngle(this.placementInCurve, this.boatLine);
         // set the quaternion

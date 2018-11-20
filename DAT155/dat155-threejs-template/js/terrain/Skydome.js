@@ -6,7 +6,7 @@ export default class Skydome extends Object3D{
         super();
 
         nightTexture = tl.load("resources/skydome/skyTexture3_resized.jpg");
-        dayTexture = tl.load("resources/skydome/skyTexture2_resized.jpg");
+        dayTexture = tl.load("resources/skydome/skyTexture4.jpg");
 
         let skyGeometry = new SphereBufferGeometry(100, 32, 32, Math.PI/2, Math.PI*2, 0, 0.5 * Math.PI);
 

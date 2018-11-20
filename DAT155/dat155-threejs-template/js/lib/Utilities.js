@@ -76,13 +76,11 @@ export default class Utilities {
     }
 
     static randomXAndZCord(position, terrainGeometry, waterLevel) {
-
-
         do{
             position.x = this.getRandomCord(-50, 50);
             position.z = this.getRandomCord(-50, 50);
             position.y = terrainGeometry.getHeightAt(position);
-        }while(position.y < waterLevel || position.y > 10.0);
+        }while(position.y < waterLevel+1 || position.y > 10.0);
 
 
         return position
@@ -92,8 +90,8 @@ export default class Utilities {
         let clones = [];
         clones[0] = object;
 
-        for(let x = 0; x < numberOfClones; x++){
-            clones[x+1] = clones[x].clone();
+        for(let x = 1; x < numberOfClones; x++){
+            clones[x] = clones[x-1].clone();
         }
         return clones;
     }
@@ -134,7 +132,6 @@ export default class Utilities {
 
     static drawPath(curve){
         let vertices = curve.getSpacedPoints(50);
-        let point;
         // Change 2D points to 3D points
         //Because our up is Y we have to set the y to the z poss and since waterheight is 4 we set Y to 4
 

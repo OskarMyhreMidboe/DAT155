@@ -2,6 +2,7 @@ import Utilities from "../lib/Utilities.js"
 import TerrainBufferGeometry from "./TerrainBufferGeometry.js";
 import {Object3D, Mesh, MeshPhongMaterial, TextureLoader} from "../lib/Three.es.js";
 import Tree from "./Tree.js";
+import Grass from "./Grass.js"
 
 
 export default class Island extends Object3D{
@@ -30,8 +31,10 @@ export default class Island extends Object3D{
                     node.receiveShadow = true ;
                 }
             });
-            let trees = new Tree(terrainGeometry, 20, waterLevel);
-            terrain.add(trees);
+            let trees = new Tree('lowpolytree', terrainGeometry, 5, waterLevel);
+            let deadTrees = new Tree('DeadTree', terrainGeometry, 40, waterLevel);
+            let grass = new Grass(terrainGeometry, waterLevel);
+            terrain.add(trees, deadTrees, grass);
 
             this.add(terrain);
         });

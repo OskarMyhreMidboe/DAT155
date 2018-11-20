@@ -16,5 +16,5 @@ export default class MyScene extends Scene{
         }
     }
 }
-const nightFog = new Fog( 0x808080, -10, 150 );
+const nightFog = new Fog( 0x191919	, -10, 150 );
 const dayFog = new Fog( 0xFFFFFF, -10, 200 );
