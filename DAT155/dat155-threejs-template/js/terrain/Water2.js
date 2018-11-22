@@ -38,14 +38,14 @@ export default class Water2 extends Object3D{
             specular: 0xe09278,
             lights: true,
             envMap: this.reflectionNight,
-            side: 2,
+            side: 1,
             reflectivity: 0.8,
             skinning: true,
         });
 
         this.water = new Mesh(waterGeometry, waterMaterial);
         this.water.receiveShadow = true;
-        this.water.rotation.x = Math.PI * -0.5;
+        this.water.rotation.x = Math.PI * +0.5;
         this.add(this.water);
 
     }
@@ -53,7 +53,7 @@ export default class Water2 extends Object3D{
     flow(deltaTime){
         this.water.position.y = Math.sin(deltaTime/4000)+ this.waterLevel;
         this.water.position.z = Math.sin(deltaTime/700);
-        this.water.material.normalScale.set(Math.sin(deltaTime/400), 1.0);
+        this.water.material.normalScale.set(Math.sin(deltaTime/900), 1.0);
     }
 
     dayNightEnvMap(time){

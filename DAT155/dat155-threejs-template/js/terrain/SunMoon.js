@@ -15,7 +15,6 @@ export default class SunMoon extends LOD{
         const material = new MeshBasicMaterial({
             map: texture,
             fog: false,
-            wireframe: true
         });
 
         for( let i = 0; i < 3; i++ ) {
@@ -28,6 +27,8 @@ export default class SunMoon extends LOD{
         this.position.y = 90;
         let light = new PointLight( 0xFFFFFFF, lightIntensity, 1000);
         light.castShadow = true;
+        light.shadow.mapSize.width = 2048;
+        light.shadow.mapSize.height= 2048;
 
         this.add( light );
 

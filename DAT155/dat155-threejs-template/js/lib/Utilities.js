@@ -138,7 +138,7 @@ export default class Utilities {
         let lineGeometry = new Geometry();
         lineGeometry.vertices = vertices;
         let lineMaterial = new LineBasicMaterial({
-            color: 0xffffff
+            color: 0xFFFFFF
         });
         let line = new Line(lineGeometry, lineMaterial);
 

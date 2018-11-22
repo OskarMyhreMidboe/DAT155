@@ -1,7 +1,7 @@
 import Utilities from "../lib/Utilities.js"
-import {Object3D, OBJLoader, MTLLoader, Mesh, TextureLoader} from "../lib/Three.es.js";
+import {Group, OBJLoader, MTLLoader, Mesh, TextureLoader} from "../lib/Three.es.js";
 
-export default class Tree extends Object3D{
+export default class Tree extends Group{
 
     constructor(treeName, terrainGeometry, numberOfTrees, waterLevel){
         super();

@@ -89,7 +89,8 @@ let sun = new SunMoonNode('resources/images/sunmap.jpg', 0.8, -20, 140);
 let moon = new SunMoonNode('resources/images/moonmap.jpg', 0.4, -20, -40);
 let boat = new Boat(waterLevel);
 let water = new Water2(waterLevel);
-scene.add( new Island(waterLevel), skyDome, sun, moon, water, boat );
+let island = new Island(waterLevel);
+scene.add( island, skyDome, sun, moon, water, boat );
 
 
 let then = performance.now();

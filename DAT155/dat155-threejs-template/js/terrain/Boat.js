@@ -1,4 +1,4 @@
-import {Mesh, PointLight, Group, OBJLoader, MTLLoader, CurvePath, Vector3, CubicBezierCurve3} from "../lib/Three.es.js"
+import {Object3D, Mesh, PointLight, Group, OBJLoader, MTLLoader, CurvePath, Vector3, CubicBezierCurve3, SplineCurve, Vector2} from "../lib/Three.es.js"
 import Utilities from "../lib/Utilities.js";
 
 export default class Boat extends Group{
@@ -6,16 +6,13 @@ export default class Boat extends Group{
     constructor(waterLevel){
         super();
 
-        this.boat = new Group();
+        this.boat = new Object3D();
         this.waterLevel = waterLevel;
 
         this.placementInCurve = 0;
         this.up = new Vector3(0, 1, 0);
         this.boatLine = new CurvePath();
         this.boatPath();
-        this.previousAngle = Utilities.getAngle(this.placementInCurve, this.boatLine);
-        this.previousPoint = this.boatLine.getPointAt( this.placementInCurve );
-
         let lantern = new PointLight( 0xFFFFFFF, 1.0, 5);
         lantern.castShadow = true;
         lantern.position.y += 1;
@@ -83,8 +80,5 @@ export default class Boat extends Group{
         let angle = Utilities.getAngle(this.placementInCurve, this.boatLine);
         // set the quaternion
         this.boat.quaternion.setFromAxisAngle( this.up, angle );
-
-        this.previousPoint = point;
-        this.previousAngle = angle;
     }
 }

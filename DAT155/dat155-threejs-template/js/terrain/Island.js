@@ -1,11 +1,11 @@
 import Utilities from "../lib/Utilities.js"
 import TerrainBufferGeometry from "./TerrainBufferGeometry.js";
-import {Object3D, Mesh, MeshPhongMaterial, TextureLoader} from "../lib/Three.es.js";
+import {Group, Mesh, MeshPhongMaterial, TextureLoader} from "../lib/Three.es.js";
 import Tree from "./Tree.js";
 import Grass from "./Grass.js"
 
 
-export default class Island extends Object3D{
+export default class Island extends Group{
 
     constructor(waterLevel){
         super();
@@ -14,12 +14,11 @@ export default class Island extends Object3D{
 
             let terrainGeometry = new TerrainBufferGeometry({
                 heightmapImage,
-                numberOfSubdivisions: 128
+                numberOfSubdivisions: 256
             });
 
             const terrainMaterial = new MeshPhongMaterial({
-                map: new TextureLoader().load('resources/textures/lovenes_konge.jpg'),
-                clipShadows: true
+                map: new TextureLoader().load('resources/textures/lovenes_konge.jpg')
             });
 
 
@@ -27,8 +26,9 @@ export default class Island extends Object3D{
 
             terrain.traverse ( function (node) {
                 if (node instanceof Mesh ){
-                    node.castShadow = true ;
+                    node.castShadow = true;
                     node.receiveShadow = true ;
+                    node.clipShadows = true;
                 }
             });
             let trees = new Tree('lowpolytree', terrainGeometry, 5, waterLevel);
